@@ -13,8 +13,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "Categories") 
+@JsonIgnoreProperties({ "products" })
 public class Categories implements Serializable{
     private static final long serialVersionUID = 1L;
 
