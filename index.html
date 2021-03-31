@@ -10,8 +10,108 @@
     crossorigin="anonymous"></script>
   <script>
     $(document).ready(function () {
-
+      refreshUsersTable();
     });
+
+    function refreshUsersTable() {
+      var settings = {
+        url: "http://localhost:8080/Users/getAllUsers",
+        method: "GET",
+        timeout: 3000,
+      };
+
+      $.ajax(settings).done(function (response) {
+        $("#usersTable").html("");
+        $.each(response, function (k, v) {
+          $("#usersTable").append("<tr><td>" + v.id + "<td><input id='name" + v.id +
+            "' class='input' type='text' value='" + v.name + "'></td><td><input id='age" + v.id +
+            "' class='input' type='number' value='" + v.age + "'></td><td><input id='telephone" + v.id +
+            "' class='input' type='number' value='" + v.telephone + "'></td><td><input id='username" + v
+            .id + "' class='input' type='text' value='" + v.username +
+            "'></td><td><input id='password" + v.id + "' class='input' type='text' value='" + v.password +
+            "'></td><td><button class='button is-warning' onclick='updateUser(" + v.id +
+            ")'>Update</button></td><td><button class='button is-danger' onclick='deleteUser(" + v.id +
+            ")'>Delete</button></td></tr>");
+        });
+      });
+    }
+
+
+
+    function updateUser(x) {
+      var id = x;
+      var name = $('#name' + x).val();
+      var age = $('#age' + x).val();
+      var tel = $('#telephone' + x).val();
+      var usn = $('#username' + x).val();
+      var psw = $('#password' + x).val();
+
+
+      var availableUser = new Object();
+      availableUser.id = id;
+      availableUser.name = name;
+      availableUser.age = parseInt(age);
+      availableUser.telephone = parseInt(tel);
+      availableUser.username = usn;
+      availableUser.password = psw;
+
+      var settings = {
+        url: "http://localhost:8080/Users/updateUser",
+        method: "PUT",
+        timeout: 3000,
+        dataType: 'json',
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        contentType: 'application/json',
+        data: JSON.stringify(availableUser)
+
+      };
+
+      $.ajax(settings).done(function (response) {
+        refreshUsersTable();
+      });
+    }
+
+    function deleteUser(x) {
+
+
+      var settings = {
+        url: "http://localhost:8080/Users/" + x,
+        method: "DELETE",
+        timeout: 3000
+      };
+
+      $.ajax(settings).done(function (response) {
+        refreshUsersTable();
+      });
+    }
+
+
+    function addNewUser() {
+      var name = $('#name').val();
+      var age = $('#age').val();
+      var tel = $('#telephone').val();
+      var usn = $('#usn').val();
+      var psw = $('#psw').val();
+
+      var settings = {
+        url: "http://localhost:8080/Users/saveUser",
+        method: "POST",
+        timeout: 3000,
+        data: {
+          name: name,
+          age: age,
+          telephone: tel,
+          username: usn,
+          password: psw
+        }
+      };
+
+      $.ajax(settings).done(function (response) {
+        refreshUsersTable();
+      });
+    }
   </script>
 </head>
 
@@ -182,7 +282,7 @@
         </tbody>
       </table>
 
-<br>
+      <br>
 
       <h2 class="subtitle">
         Carts
