@@ -22,16 +22,12 @@ public class Categories implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int categoryid;
     String categoryName;
+    String categoryDescription;
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name = "categoryid")
     List<Products>products;
 
-    public Categories(int categoryid, String categoryName, List<Products> products) {
-        this.categoryid = categoryid;
-        this.categoryName = categoryName;
-        this.products = products;
-    }
 
     public static long getSerialversionuid() {
         return serialVersionUID;
@@ -62,6 +58,21 @@ public class Categories implements Serializable{
     }
 
     public Categories() {
+    }
+
+    public String getCategoryDescription() {
+        return categoryDescription;
+    }
+
+    public void setCategoryDescription(String categoryDescription) {
+        this.categoryDescription = categoryDescription;
+    }
+
+    public Categories(int categoryid, String categoryName, String categoryDescription, List<Products> products) {
+        this.categoryid = categoryid;
+        this.categoryName = categoryName;
+        this.categoryDescription = categoryDescription;
+        this.products = products;
     }
 
 
