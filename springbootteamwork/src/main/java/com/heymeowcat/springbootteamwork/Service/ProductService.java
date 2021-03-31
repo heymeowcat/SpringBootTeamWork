@@ -16,7 +16,7 @@ public class ProductService {
 	ProductRepository productRepository;
 
 	public List<Products> getAllProducts() {
-		return productRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+		return productRepository.findAll(Sort.by(Sort.Direction.ASC, "productid"));
 	}
 
 	public List<Products> addProducts(List<Products> pList) {
