@@ -11,6 +11,7 @@
   <script>
     $(document).ready(function () {
       refreshUsersTable();
+      refreshCategoryTable();
     });
 
     function refreshUsersTable() {
@@ -46,7 +47,6 @@
       var usn = $('#username' + x).val();
       var psw = $('#password' + x).val();
 
-
       var availableUser = new Object();
       availableUser.id = id;
       availableUser.name = name;
@@ -74,8 +74,6 @@
     }
 
     function deleteUser(x) {
-
-
       var settings = {
         url: "http://localhost:8080/Users/" + x,
         method: "DELETE",
@@ -112,6 +110,97 @@
         refreshUsersTable();
       });
     }
+
+
+    
+    function addNewcategory() {
+        var categoryname = $('#categoryname').val();
+        var categorydescription = $('#categorydescription').val()
+
+        var newCategory = new Object();
+        newCategory.categoryName = categoryname;
+        newCategory.categoryDescription = categorydescription;
+
+        var settings = {
+          url: "http://localhost:8080/Categories/addCategory",
+          method: "POST",
+          timeout: 3000,
+          dataType: 'json',
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          contentType: 'application/json',
+          data: JSON.stringify(newCategory)
+        };
+
+        $.ajax(settings).done(function (response) {
+          refreshCategoryTable();
+        });
+      }
+
+      function refreshCategoryTable() {
+      var settings = {
+        url: "http://localhost:8080/Categories/getAllCategories",
+        method: "GET",
+        timeout: 3000,
+      };
+
+      $.ajax(settings).done(function (response) {
+        $("#categoriesTable").html("");
+        $.each(response, function (k, v) {
+          $("#categoriesTable").append("<tr><td>" + v.categoryid + "<td><input id='categoryname" + v.categoryid +
+            "' class='input' type='text' value='" + v.categoryName + "'></td><td><input id='categorydescription" + v.categoryid +
+            "' class='input' type='text' value='" + v.categoryDescription + "'><td><button class='button is-warning' onclick='updateCategory(" + v.categoryid +
+            ")'>Update</button></td><td><button class='button is-danger' onclick='deleteCategory(" + v.categoryid +
+            ")'>Delete</button></td></tr>");
+        });
+      });
+    }
+
+
+
+    function updateCategory(x) {
+      var id = x;
+      var name = $('#categoryname' + x).val();
+      var description = $('#categorydescription' + x).val();
+
+      var availableCategory = new Object();
+      availableCategory.categoryid = id;
+      availableCategory.categoryName = name;
+      availableCategory.categoryDescription = description;
+
+      var settings = {
+        url: "http://localhost:8080/Categories/updateCategory",
+        method: "PUT",
+        timeout: 3000,
+        dataType: 'json',
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        contentType: 'application/json',
+        data: JSON.stringify(availableCategory)
+
+      };
+
+      $.ajax(settings).done(function (response) {
+        refreshCategoryTable();
+      });
+    }
+
+    function deleteCategory(x) {
+      var settings = {
+        url: "http://localhost:8080/Categories/" + x,
+        method: "DELETE",
+        timeout: 3000
+      };
+
+      $.ajax(settings).done(function (response) {
+        refreshCategoryTable();
+      });
+    }
+
+
+
   </script>
 </head>
 
@@ -229,14 +318,14 @@
             Add Product Category
           </h2>
           <div class="field">
-            <label class="label">Cart Name</label>
+            <label class="label">Category Name</label>
             <div class="control">
               <input id="categoryname" class="input" type="text">
             </div>
           </div>
 
           <div class="field">
-            <label class="label">Product Description</label>
+            <label class="label">Category Description</label>
             <div class="control">
               <input id="categorydescription" class="input" type="text">
             </div>
@@ -282,28 +371,7 @@
         </tbody>
       </table>
 
-      <br>
-
-      <h2 class="subtitle">
-        Carts
-      </h2>
-
-      <table class="table">
-        <thead>
-          <tr>
-            <th><abbr title="Id">Id</abbr></th>
-            <th><abbr title="Product Name">Product</abbr></th>
-            <th><abbr title="Total">Total</abbr></th>
-          </tr>
-
-        </thead>
-
-        <tbody id="cartTable">
-
-        </tbody>
-      </table>
-
-
+    
 
       <div class="columns">
         <div class="column">
