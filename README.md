@@ -1,3 +1,2 @@
 # SpringBootTeamWork
-![Demo](https://user-images.githubusercontent.com/40495273/113166945-ddc31f00-9260-11eb-968a-25a0fec77e5b.mp4)
-
+[![Demo](https://user-images.githubusercontent.com/40495273/113172212-d6eadb00-9265-11eb-9a0e-3299afa7dc53.png)](https://youtu.be/tGp3OZDuru0 "Demo")
