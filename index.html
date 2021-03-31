@@ -12,6 +12,7 @@
     $(document).ready(function () {
       refreshUsersTable();
       refreshCategoryTable();
+      refreshProductsTable();
     });
 
     function refreshUsersTable() {
@@ -112,33 +113,33 @@
     }
 
 
-    
+
     function addNewcategory() {
-        var categoryname = $('#categoryname').val();
-        var categorydescription = $('#categorydescription').val()
+      var categoryname = $('#categoryname').val();
+      var categorydescription = $('#categorydescription').val()
 
-        var newCategory = new Object();
-        newCategory.categoryName = categoryname;
-        newCategory.categoryDescription = categorydescription;
+      var newCategory = new Object();
+      newCategory.categoryName = categoryname;
+      newCategory.categoryDescription = categorydescription;
 
-        var settings = {
-          url: "http://localhost:8080/Categories/addCategory",
-          method: "POST",
-          timeout: 3000,
-          dataType: 'json',
-          "headers": {
-            "Content-Type": "application/json"
-          },
-          contentType: 'application/json',
-          data: JSON.stringify(newCategory)
-        };
+      var settings = {
+        url: "http://localhost:8080/Categories/addCategory",
+        method: "POST",
+        timeout: 3000,
+        dataType: 'json',
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        contentType: 'application/json',
+        data: JSON.stringify(newCategory)
+      };
 
-        $.ajax(settings).done(function (response) {
-          refreshCategoryTable();
-        });
-      }
+      $.ajax(settings).done(function (response) {
+        refreshCategoryTable();
+      });
+    }
 
-      function refreshCategoryTable() {
+    function refreshCategoryTable() {
       var settings = {
         url: "http://localhost:8080/Categories/getAllCategories",
         method: "GET",
@@ -148,10 +149,14 @@
       $.ajax(settings).done(function (response) {
         $("#categoriesTable").html("");
         $.each(response, function (k, v) {
-          $("#categoriesTable").append("<tr><td>" + v.categoryid + "<td><input id='categoryname" + v.categoryid +
-            "' class='input' type='text' value='" + v.categoryName + "'></td><td><input id='categorydescription" + v.categoryid +
-            "' class='input' type='text' value='" + v.categoryDescription + "'><td><button class='button is-warning' onclick='updateCategory(" + v.categoryid +
-            ")'>Update</button></td><td><button class='button is-danger' onclick='deleteCategory(" + v.categoryid +
+          $("#categoriesTable").append("<tr><td>" + v.categoryid + "<td><input id='categoryname" + v
+            .categoryid +
+            "' class='input' type='text' value='" + v.categoryName +
+            "'></td><td><input id='categorydescription" + v.categoryid +
+            "' class='input' type='text' value='" + v.categoryDescription +
+            "'><td><button class='button is-warning' onclick='updateCategory(" + v.categoryid +
+            ")'>Update</button></td><td><button class='button is-danger' onclick='deleteCategory(" + v
+            .categoryid +
             ")'>Delete</button></td></tr>");
         });
       });
@@ -201,6 +206,133 @@
 
 
 
+
+
+
+
+
+
+
+    function addNewProduct() {
+      var pname = $('#pname').val();
+      var pdescription = $('#pdescription').val()
+      var pbuyprice = $('#pbuyprice').val()
+      var psellprice = $('#psellprice').val()
+      var pqty = $('#pqty').val()
+      var pcategoryid = $('#pcategoryid').val()
+
+      var newProduct = new Object();
+      newProduct.productname = pname;
+      newProduct.productdescription = pdescription;
+      newProduct.sellprice = pbuyprice;
+      newProduct.buyprice = psellprice;
+      newProduct.qty = pqty;
+      newProduct.category = {
+        "categoryid": pcategoryid
+      };
+
+      var settings = {
+        url: "http://localhost:8080/Products/addProduct",
+        method: "POST",
+        timeout: 3000,
+        dataType: 'json',
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        contentType: 'application/json',
+        data: JSON.stringify(newProduct)
+      };
+
+      $.ajax(settings).done(function (response) {
+        refreshProductsTable();
+      });
+    }
+
+    function refreshProductsTable() {
+      var settings = {
+        url: "http://localhost:8080/Products/getAllProducts",
+        method: "GET",
+        timeout: 3000,
+      };
+
+      $.ajax(settings).done(function (response) {
+        $("#productTable").html("");
+        $.each(response, function (k, v) {
+          $("#productTable").append("<tr><td>" + v.productid + "<td><input id='productname" + v
+            .productid +
+            "' class='input' type='text' value='" + v.productname +
+            "'></td><td><input id='productdescription" + v.productid +
+            "' class='input' type='text' value='" + v.productdescription +
+            "'></td><td><input id='productsellprice" + v.productid +
+            "' class='input' type='number' value='" + v.sellprice +
+            "'></td><td><input id='productbuyprice" + v.productid +
+            "' class='input' type='number' value='" + v.buyprice +
+            "'></td><td><input id='productqty" + v.productid +
+            "' class='input' type='number' value='" + v.qty +
+            "'></td><td><input id='productcategory" + v.productid +
+            "' class='input' type='text' value='" + v.category.categoryName +
+            "'><input type='hidden' id='productcategoryid" + v.productid + "' value='" + v.category
+            .categoryid + "'></td><td><button class='button is-warning' onclick='updateProduct(" + v
+            .productid +
+            ")'>Update</button></td><td><button class='button is-danger' onclick='deleteProduct(" + v
+            .productid +
+            ")'>Delete</button></td></tr>");
+        });
+      });
+    }
+
+
+
+    function updateProduct(x) {
+      var id = x;
+      var name = $('#productname' + x).val();
+      var description = $('#productdescription' + x).val();
+      var sellprice = $('#productsellprice' + x).val();
+      var buyprice = $('#productbuyprice' + x).val();
+      var qty = $('#productqty' + x).val();
+      var categoryid = $('#productcategoryid' + x).val();
+
+      var availableProduct = new Object();
+      availableProduct.productid = id;
+      availableProduct.productname = name;
+      availableProduct.productdescription = description;
+      availableProduct.sellprice = sellprice;
+      availableProduct.buyprice = buyprice;
+      availableProduct.qty = qty;
+      availableProduct.category = {
+        "categoryid": categoryid
+      };
+
+
+      var settings = {
+        url: "http://localhost:8080/Products/updateProduct",
+        method: "PUT",
+        timeout: 3000,
+        dataType: 'json',
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        contentType: 'application/json',
+        data: JSON.stringify(availableProduct)
+
+      };
+
+      $.ajax(settings).done(function (response) {
+        refreshProductsTable();
+      });
+    }
+
+    function deleteProduct(x) {
+      var settings = {
+        url: "http://localhost:8080/Products/" + x,
+        method: "DELETE",
+        timeout: 3000
+      };
+
+      $.ajax(settings).done(function (response) {
+        refreshProductsTable();
+      });
+    }
   </script>
 </head>
 
@@ -303,6 +435,13 @@
             </div>
           </div>
 
+          <div class="field">
+            <label class="label">Category Id</label>
+            <div class="control">
+              <input id="pcategoryid" class="input" type="number">
+            </div>
+          </div>
+
 
           <div class="field">
             <div class="control">
@@ -371,57 +510,56 @@
         </tbody>
       </table>
 
-    
-
-      <div class="columns">
-        <div class="column">
-
-          <h2 class="subtitle">
-            Products
-          </h2>
 
 
-          <table class="table">
-            <thead>
-              <tr>
-                <th><abbr title="Id">Id</abbr></th>
-                <th><abbr title="Name">Name</abbr></th>
-                <th><abbr title="Descirption">Description</abbr></th>
-                <th><abbr title="Buy Price">Buy Price</abbr></th>
-                <th><abbr title="Sell Price">Sell Price</abbr></th>
-                <th><abbr title="Quantity">Quantity</abbr></th>
-              </tr>
-            </thead>
-
-            <tbody id="productTable">
-
-            </tbody>
-          </table>
-
-        </div>
-        <div class="column">
-
-          <h2 class="subtitle">
-            Categories
-          </h2>
 
 
-          <table class="table">
-            <thead>
-              <tr>
-                <th><abbr title="Id">Id</abbr></th>
-                <th><abbr title="Name">Name</abbr></th>
-                <th><abbr title="Descirption">Description</abbr></th>
-              </tr>
-            </thead>
+      <h2 class="subtitle">
+        Products
+      </h2>
 
-            <tbody id="categoriesTable">
 
-            </tbody>
-          </table>
+      <table class="table">
+        <thead>
+          <tr>
+            <th><abbr title="Id">Id</abbr></th>
+            <th><abbr title="Name">Name</abbr></th>
+            <th><abbr title="Descirption">Description</abbr></th>
+            <th><abbr title="Buy Price">Buy Price</abbr></th>
+            <th><abbr title="Sell Price">Sell Price</abbr></th>
+            <th><abbr title="Quantity">Quantity</abbr></th>
+            <th><abbr title="Category">Category</abbr></th>
+          </tr>
+        </thead>
 
-        </div>
-      </div>
+        <tbody id="productTable">
+
+        </tbody>
+      </table>
+
+
+
+      <h2 class="subtitle">
+        Categories
+      </h2>
+
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th><abbr title="Id">Id</abbr></th>
+            <th><abbr title="Name">Name</abbr></th>
+            <th><abbr title="Descirption">Description</abbr></th>
+          </tr>
+        </thead>
+
+        <tbody id="categoriesTable">
+
+        </tbody>
+      </table>
+
+    </div>
+
 
     </div>
 
