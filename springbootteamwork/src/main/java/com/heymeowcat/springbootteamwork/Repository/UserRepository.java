@@ -7,5 +7,5 @@ import com.heymeowcat.springbootteamwork.models.Users;
 
 @Repository
 public interface UserRepository extends JpaRepository<Users, Integer>{
-
+    Users findByUsername(String username);
 }
