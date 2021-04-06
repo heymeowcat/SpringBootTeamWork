@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "User") 
-public class Users implements Serializable{
+public class UsersDao implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
@@ -80,10 +80,10 @@ public class Users implements Serializable{
         this.password = password;
     }
 
-    public Users() {
+    public UsersDao() {
     }
 
-    public Users(int id, String name, int age, int telephone, String username, String password) {
+    public UsersDao(int id, String name, int age, int telephone, String username, String password) {
         this.id = id;
         this.name = name;
         this.age = age;

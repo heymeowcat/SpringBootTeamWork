@@ -9,15 +9,54 @@
   <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
     crossorigin="anonymous"></script>
   <script>
+    var baseUrl = "http://localhost:8080";
+
+
     $(document).ready(function () {
+      $('#registersection').hide();
+      $('#loginsection').show();
+
       refreshUsersTable();
       refreshCategoryTable();
       refreshProductsTable();
     });
 
+    function login() {
+      var lgnusn = $("#usernameinlogin").val();
+      var lgnpsw = $("#passwordinlogin").val();
+
+      var jwtreq = new Object();
+      jwtreq.username = lgnusn;
+      jwtreq.password = lgnpsw;
+
+
+      var settings = {
+        url: baseUrl + "/Users/authenticate",
+        method: "PoST",
+        timeout: 3000,
+        dataType: 'json',
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        contentType: 'application/json',
+        data: JSON.stringify(jwtreq)
+
+      };
+
+
+
+
+      $.ajax(settings).done(function (response) {
+        console.log(response);
+      });
+
+    }
+
+
+
     function refreshUsersTable() {
       var settings = {
-        url: "http://localhost:8080/Users/getAllUsers",
+        url: baseUrl + "/Users/getAllUsers",
         method: "GET",
         timeout: 3000,
       };
@@ -57,7 +96,7 @@
       availableUser.password = psw;
 
       var settings = {
-        url: "http://localhost:8080/Users/updateUser",
+        url: baseUrl + "/Users/updateUser",
         method: "PUT",
         timeout: 3000,
         dataType: 'json',
@@ -76,7 +115,7 @@
 
     function deleteUser(x) {
       var settings = {
-        url: "http://localhost:8080/Users/" + x,
+        url: baseUrl + "/Users/" + x,
         method: "DELETE",
         timeout: 3000
       };
@@ -95,7 +134,7 @@
       var psw = $('#psw').val();
 
       var settings = {
-        url: "http://localhost:8080/Users/saveUser",
+        url: baseUrl + "/Users/saveUser",
         method: "POST",
         timeout: 3000,
         data: {
@@ -123,7 +162,7 @@
       newCategory.categoryDescription = categorydescription;
 
       var settings = {
-        url: "http://localhost:8080/Categories/addCategory",
+        url: baseUrl + "/Categories/addCategory",
         method: "POST",
         timeout: 3000,
         dataType: 'json',
@@ -141,7 +180,7 @@
 
     function refreshCategoryTable() {
       var settings = {
-        url: "http://localhost:8080/Categories/getAllCategories",
+        url: baseUrl + "/Categories/getAllCategories",
         method: "GET",
         timeout: 3000,
       };
@@ -175,7 +214,7 @@
       availableCategory.categoryDescription = description;
 
       var settings = {
-        url: "http://localhost:8080/Categories/updateCategory",
+        url: baseUrl + "/Categories/updateCategory",
         method: "PUT",
         timeout: 3000,
         dataType: 'json',
@@ -194,7 +233,7 @@
 
     function deleteCategory(x) {
       var settings = {
-        url: "http://localhost:8080/Categories/" + x,
+        url: baseUrl + "/Categories/" + x,
         method: "DELETE",
         timeout: 3000
       };
@@ -232,7 +271,7 @@
       };
 
       var settings = {
-        url: "http://localhost:8080/Products/addProduct",
+        url: baseUrl + "/Products/addProduct",
         method: "POST",
         timeout: 3000,
         dataType: 'json',
@@ -250,7 +289,7 @@
 
     function refreshProductsTable() {
       var settings = {
-        url: "http://localhost:8080/Products/getAllProducts",
+        url: baseUrl + "/Products/getAllProducts",
         method: "GET",
         timeout: 3000,
       };
@@ -305,7 +344,7 @@
 
 
       var settings = {
-        url: "http://localhost:8080/Products/updateProduct",
+        url: baseUrl + "/Products/updateProduct",
         method: "PUT",
         timeout: 3000,
         dataType: 'json',
@@ -324,7 +363,7 @@
 
     function deleteProduct(x) {
       var settings = {
-        url: "http://localhost:8080/Products/" + x,
+        url: baseUrl + "/Products/" + x,
         method: "DELETE",
         timeout: 3000
       };
@@ -337,6 +376,123 @@
 </head>
 
 <body>
+
+
+
+  <section id="loginsection" class="hero is-primary is-fullheight">
+    <div class="hero-body">
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column is-5-tablet is-4-desktop is-3-widescreen">
+            <form action="" class="box">
+              <div class="field">
+                <label class="label">Username</label>
+                <div class="control">
+                  <input id="usernameinlogin" type="text" class="input" required>
+                </div>
+              </div>
+              <div class="field">
+                <label class="label">Password</label>
+                <div class="control">
+                  <input id="passwordinlogin" type="password" class="input" required>
+                </div>
+              </div>
+
+
+
+              <div class="field">
+                <label for="" class="checkbox">
+                  <input type="checkbox">
+                  Remember me
+                </label>
+              </div>
+              <div class="field level">
+                <button onclick="login()" class="level-left  button is-success">
+                  Login
+                </button>
+                <button onclick="$('#loginsection').hide();$('#registersection').show();"
+                  class="level-right button is-ghost">
+                  Register
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
+  <section id="registersection" style="background:#0cc7a8;" class="hero is-fullheight">
+    <div class="hero-body">
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column is-5-tablet is-4-desktop is-3-widescreen">
+            <form action="" class="box">
+              <div class="field">
+
+
+
+                <div class="field">
+                  <label class="label">Name</label>
+                  <div class="control">
+                    <input id="name" class="input" type="text">
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label class="label">Age</label>
+                  <div class="control">
+                    <input id="age" class="input" type="number">
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label class="label">Telephone</label>
+                  <div class="control">
+                    <input id="telephone" class="input" type="tel">
+                  </div>
+                </div>
+
+
+                <div class="field">
+                  <label class="label">Username</label>
+                  <div class="control">
+                    <input id="usn" class="input" type="text">
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label class="label">Password</label>
+                  <div class="control">
+                    <input id="psw" class="input" type="password">
+                  </div>
+                </div>
+
+
+
+
+                <div class="field level">
+                  <button onclick="addNewUser()" class="level-left  button is-success">
+                    Register
+                  </button>
+                  <button onclick="$('#loginsection').show();$('#registersection').hide();"
+                    class="level-right button is-ghost">
+                    Login
+                  </button>
+                </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
   <section class="section">
     <div class="container">
       <h1 class="title">
