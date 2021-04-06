@@ -13,15 +13,21 @@
 
 
     $(document).ready(function () {
+      $('#mainSection').hide();
       $('#registersection').hide();
       $('#loginsection').show();
-
-      refreshUsersTable();
-      refreshCategoryTable();
-      refreshProductsTable();
+      if (sessionStorage.getItem("token") != null) {
+        $('#mainSection').show();
+        $('#registersection').hide();
+        $('#loginsection').hide();
+        refreshUsersTable();
+        refreshCategoryTable();
+        refreshProductsTable();
+      }
     });
 
     function login() {
+
       var lgnusn = $("#usernameinlogin").val();
       var lgnpsw = $("#passwordinlogin").val();
 
@@ -43,11 +49,11 @@
 
       };
 
-
-
-
       $.ajax(settings).done(function (response) {
-        console.log(response);
+        sessionStorage.setItem("token", response.token);
+        // Retrieve
+        console.log(sessionStorage.getItem("token"));
+        
       });
 
     }
@@ -58,7 +64,10 @@
       var settings = {
         url: baseUrl + "/Users/getAllUsers",
         method: "GET",
-        timeout: 3000,
+        timeout: 0,
+        "headers": {
+          "Authorization": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ2aWR1cmEiLCJleHAiOjE2MTc3MDY3MDcsImlhdCI6MTYxNzY4ODcwN30.yQBRYTfoln4H5QvdpiLiVAz1rKqWDfDI8gHoa7rFOZvAFpuH9D6y2Uzs6SJfw4QBfWs255LiFdt7rllzKCM0zw"
+        },
       };
 
       $.ajax(settings).done(function (response) {
@@ -101,7 +110,8 @@
         timeout: 3000,
         dataType: 'json',
         "headers": {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + sessionStorage.getItem("token")
         },
         contentType: 'application/json',
         data: JSON.stringify(availableUser)
@@ -167,7 +177,8 @@
         timeout: 3000,
         dataType: 'json',
         "headers": {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + sessionStorage.getItem("token")
         },
         contentType: 'application/json',
         data: JSON.stringify(newCategory)
@@ -183,6 +194,9 @@
         url: baseUrl + "/Categories/getAllCategories",
         method: "GET",
         timeout: 3000,
+        "headers": {
+          "Authorization": "Bearer " + sessionStorage.getItem("token")
+        }
       };
 
       $.ajax(settings).done(function (response) {
@@ -219,7 +233,8 @@
         timeout: 3000,
         dataType: 'json',
         "headers": {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + sessionStorage.getItem("token")
         },
         contentType: 'application/json',
         data: JSON.stringify(availableCategory)
@@ -235,7 +250,10 @@
       var settings = {
         url: baseUrl + "/Categories/" + x,
         method: "DELETE",
-        timeout: 3000
+        timeout: 3000,
+        "headers": {
+          "Authorization": "Bearer " + sessionStorage.getItem("token")
+        }
       };
 
       $.ajax(settings).done(function (response) {
@@ -276,7 +294,8 @@
         timeout: 3000,
         dataType: 'json',
         "headers": {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + sessionStorage.getItem("token")
         },
         contentType: 'application/json',
         data: JSON.stringify(newProduct)
@@ -291,6 +310,9 @@
       var settings = {
         url: baseUrl + "/Products/getAllProducts",
         method: "GET",
+        "headers": {
+          "Authorization": "Bearer " + sessionStorage.getItem("token")
+        },
         timeout: 3000,
       };
 
@@ -349,7 +371,8 @@
         timeout: 3000,
         dataType: 'json',
         "headers": {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + sessionStorage.getItem("token")
         },
         contentType: 'application/json',
         data: JSON.stringify(availableProduct)
@@ -365,6 +388,9 @@
       var settings = {
         url: baseUrl + "/Products/" + x,
         method: "DELETE",
+        "headers": {
+          "Authorization": "Bearer " + sessionStorage.getItem("token")
+        },
         timeout: 3000
       };
 
@@ -384,7 +410,7 @@
       <div class="container">
         <div class="columns is-centered">
           <div class="column is-5-tablet is-4-desktop is-3-widescreen">
-            <form action="" class="box">
+            <div class="box">
               <div class="field">
                 <label class="label">Username</label>
                 <div class="control">
@@ -415,7 +441,7 @@
                   Register
                 </button>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       </div>
@@ -430,7 +456,7 @@
       <div class="container">
         <div class="columns is-centered">
           <div class="column is-5-tablet is-4-desktop is-3-widescreen">
-            <form action="" class="box">
+            <div class="box">
               <div class="field">
 
 
@@ -483,17 +509,17 @@
                     Login
                   </button>
                 </div>
-            </form>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
   </section>
 
 
 
 
-  <section class="section">
+  <section id="mainSection" class="section">
     <div class="container">
       <h1 class="title">
         Codefest Team Work Spring
