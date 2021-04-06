@@ -1,12 +1,11 @@
 package com.heymeowcat.springbootteamwork.Repository;
 
-import com.heymeowcat.springbootteamwork.models.UsersDao;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.heymeowcat.springbootteamwork.models.Users;
 
 @Repository
-public interface UserRepository extends JpaRepository<UsersDao, Integer>{
-    UsersDao findByUsername(String username);
+public interface UserRepository extends JpaRepository<Users, Integer>{
+    Users findByUsername(String username);
 }

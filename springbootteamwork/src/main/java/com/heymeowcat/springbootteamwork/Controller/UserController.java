@@ -7,7 +7,7 @@ import com.heymeowcat.springbootteamwork.Config.JwtTokenUtil;
 import com.heymeowcat.springbootteamwork.Service.UserService;
 import com.heymeowcat.springbootteamwork.models.JwtRequest;
 import com.heymeowcat.springbootteamwork.models.JwtResponse;
-import com.heymeowcat.springbootteamwork.models.UsersDao;
+import com.heymeowcat.springbootteamwork.models.Users;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -59,6 +59,9 @@ public class UserController {
 	}
 
 	private void authenticate(String username, String password) throws Exception {
+		Objects.requireNonNull(username);
+		Objects.requireNonNull(password);
+
 		try {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 		} catch (DisabledException e) {
@@ -71,29 +74,29 @@ public class UserController {
 
 
     @GetMapping("/getAllUsers")
-    public List<UsersDao> getAllUsers() {
+    public List<Users> getAllUsers() {
         return userService.getAllUsers();
     }
 
     @PostMapping("/addUsers")
-    public List<UsersDao> addUsers(@RequestBody List<UsersDao> uList) {
+    public List<Users> addUsers(@RequestBody List<Users> uList) {
         return userService.addUsers(uList);
     }
 
     @PostMapping("/addUser")
-    public UsersDao addUser(@RequestBody UsersDao user) {
+    public Users addUser(@RequestBody Users user) {
         return userService.addUser(user);
     }
 
 
     @PostMapping("/saveUser")
-    public UsersDao saveUser(@RequestBody @RequestParam("name")String name,@RequestBody @RequestParam("age")Integer age,@RequestBody @RequestParam("telephone")Integer telephone,@RequestBody @RequestParam("username")String username,@RequestParam("password")String password) {
-        return userService.addUser(new UsersDao(0,name, age, telephone, username, password));
+    public Users saveUser(@RequestBody @RequestParam("name")String name,@RequestBody @RequestParam("age")Integer age,@RequestBody @RequestParam("telephone")Integer telephone,@RequestBody @RequestParam("username")String username,@RequestParam("password")String password) {
+        return userService.addUser(new Users(0,name, age, telephone, username, password));
     }
     
 
     @PutMapping("/updateUser")
-    public UsersDao updateUser(@RequestBody UsersDao user) {
+    public Users updateUser(@RequestBody Users user) {
         return userService.updateUser(user);
     }
 
@@ -103,7 +106,7 @@ public class UserController {
     }
 
     @GetMapping("{id}")
-    public UsersDao getUser(@PathVariable int id) {
+    public Users getUser(@PathVariable int id) {
         return userService.getUserById(id);
     }
 
